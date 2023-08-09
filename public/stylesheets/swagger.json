@@ -1,0 +1,234 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "An Employee API Management System that handles employee data updates and provides efficient access to employee information",
+    "version" : "1.0",
+    "title" : "Employee Management API",
+    "termsOfService" : "Terms and Condition",
+    "contact" : {
+      "name" : "Siddarood"
+    },
+    "license" : {
+      "name" : "none",
+      "url" : "http://licenseUrl"
+    }
+  },
+  "host" : "localhost:8080",
+  "basePath" : "/api",
+  "tags" : [ {
+    "name" : "employees"
+  } ],
+  "paths" : {
+    "/employees/bin/" : {
+      "get" : {
+        "tags" : [ "employees" ],
+        "summary" : "Get all the Deleted employees from Database",
+        "description" : "Make HTTP request Get all the Deleted employees",
+        "operationId" : "listBinEmployees",
+        "parameters" : [ {
+          "name" : "request",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully"
+          },
+          "404" : {
+            "description" : "Recycle bin is Empty"
+          }
+        }
+      }
+    },
+    "/employees/clearBin/" : {
+      "delete" : {
+        "tags" : [ "employees" ],
+        "summary" : "Empty the recycle Bin from the Database",
+        "description" : "Make HTTP request to Empty the recycle Bin",
+        "operationId" : "emptyRecycleBin",
+        "parameters" : [ {
+          "name" : "request",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Recycle bin cleared successfully"
+          },
+          "404" : {
+            "description" : "Data not found"
+          }
+        }
+      }
+    },
+    "/employees" : {
+      "get" : {
+        "tags" : [ "employees" ],
+        "summary" : "Get all the Employee from the Database",
+        "description" : "Make HTTP request to Get all the Employees",
+        "operationId" : "getAllEmployees",
+        "parameters" : [ {
+          "name" : "request",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK Response"
+          },
+          "404" : {
+            "description" : "No employees found"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "employees" ],
+        "summary" : "Add a new Employee to the Database",
+        "description" : "Make HTTP request to add new Employee",
+        "operationId" : "create",
+        "parameters" : [ {
+          "name" : "request",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/CompletionStageResult"
+            }
+          },
+          "400" : {
+            "description" : "Expecting Json data"
+          },
+          "201" : {
+            "description" : "Employee saved successfully"
+          }
+        }
+      }
+    },
+    "/employees/{id}" : {
+      "get" : {
+        "tags" : [ "employees" ],
+        "summary" : "Get a Employee from the Database",
+        "description" : "Make HTTP request to get a Employee by Id",
+        "operationId" : "retrieve",
+        "parameters" : [ {
+          "name" : "request",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK Response"
+          },
+          "404" : {
+            "description" : "Employee not Found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "employees" ],
+        "summary" : "Update existing Employee to the Database",
+        "description" : "Make HTTP request to Update the Employee",
+        "operationId" : "update",
+        "parameters" : [ {
+          "name" : "request",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Employee updated successfully"
+          },
+          "400" : {
+            "description" : "Expecting Json data"
+          },
+          "404" : {
+            "description" : "Employee not found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "employees" ],
+        "summary" : "Delete a Employee from the Database",
+        "description" : "Make HTTP request to Delete the Employee",
+        "operationId" : "delete",
+        "parameters" : [ {
+          "name" : "request",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Employee deleted successfully"
+          },
+          "404" : {
+            "description" : "Employee not found"
+          }
+        }
+      }
+    },
+    "/employees/restore/{id}" : {
+      "delete" : {
+        "tags" : [ "employees" ],
+        "summary" : "Restore Deleted Employee from the Database",
+        "description" : "Make HTTP request Restore Deleted Employee",
+        "operationId" : "restore",
+        "parameters" : [ {
+          "name" : "request",
+          "in" : "query",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "id",
+          "in" : "path",
+          "required" : true,
+          "type" : "integer",
+          "format" : "int32"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Employee restored successfully"
+          },
+          "404" : {
+            "description" : "Employee not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "CompletionStage" : {
+      "type" : "object"
+    },
+    "CompletionStageResult" : {
+      "type" : "object"
+    }
+  }
+}

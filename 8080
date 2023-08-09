@@ -1,0 +1,27 @@
+[info] welcome to sbt 1.7.2 (Oracle Corporation Java 1.8.0_371)
+[info] loading settings for project java-play-database-build from plugins.sbt ...
+[info] loading project definition from C:\Users\40020885\OneDrive - LTTS\Desktop\Project\ProjectPOC\BackEnd\Java-Play-Database\project
+[info] loading settings for project root from build.sbt ...
+[info]   __              __
+[info]   \ \     ____   / /____ _ __  __
+[info]    \ \   / __ \ / // __ `// / / /
+[info]    / /  / /_/ // // /_/ // /_/ /
+[info]   /_/  / .___//_/ \__,_/ \__, /
+[info]       /_/               /____/
+[info] 
+[info] Version 2.8.19 running Java 1.8.0_371
+[info] 
+[info] Play is run entirely by the community. Please consider contributing and/or donating:
+[info] https://www.playframework.com/sponsors
+[info] 
+[error] Expected ID character
+[error] Not a valid command: PlayKeys (similar: last)
+[error] Expected project ID
+[error] Expected configuration
+[error] Expected ':'
+[error] Expected configuration ident
+[error] Expected '/'
+[error] Expected key
+[error] Not a valid key: PlayKeys (similar: playRoutes)
+[error] PlayKeys.devSettings
+[error]         ^

@@ -1,0 +1,37 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+#Adding Swagger to  Play app
+
+
+
+ # Map static resources from the /public folder to the /assets URL path GET /assets/*file controllers.Assets.at(path="/public", file)
+
+#Swagger
+#Adding Swagger to Play app
+GET     /swagger.json                       controllers.ApiHelpController.getResources
+
+GET     /docs/                              controllers.Assets.at(path="/public/", file:String = "swagger.json")
+GET     /docs/swagger-ui/*file              controllers.Assets.at(path="/public/swagger-ui", file:String)
+
+
+
+
+ # Map static resources from the /public folder to the /assets URL path GET /assets/*file controllers.Assets.at(path="/public", file)
+# An example controller showing a sample home page
+GET     /api/employees                      controllers.EmployeeController.getAllEmployees(request: Request)
+GET     /api/employees/:id                  controllers.EmployeeController.retrieve(request: Request,id: Int)
+GET     /api/employees/bin/                 controllers.EmployeeController.listBinEmployees(request: Request)
+POST    /api/employees                      controllers.EmployeeController.create(request: Request)
+PUT     /api/employees/:id                  controllers.EmployeeController.update(request: Request,id: Int)
+DELETE  /api/employees/:id                  controllers.EmployeeController.delete(request: Request,id: Int)
+DELETE  /api/employees/restore/:id          controllers.EmployeeController.restore(request: Request,id: Int)
+DELETE  /api/employees/clearBin/            controllers.EmployeeController.emptyRecycleBin(request: Request)
+POST    /api/saveUserAccount                    controllers.EmployeeController.saveUserAccount(request: Request)
+GET     /api/checkUserCredentials               controllers.EmployeeController.checkUserCredentials(request: Request)
+
+
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
