@@ -1,7 +1,7 @@
 package services;
 
-import io.swagger.annotations.Api;
 import models.Employee;
+import org.mindrot.jbcrypt.BCrypt;
 import play.db.Database;
 import models.UserAccount;
 
@@ -47,10 +47,7 @@ public class EmployeeDatabase {
     }
 
     public CompletionStage<Boolean> saveEmployee(Employee employee) {
-        String sql = "EXEC InsertEmployeeWithEmergencyInfo\n" +
-                "@Gender = ?,@FirstName = ?,@LastName = ?,@Phone = ?,@Mail = ?,@Birthday =? ,@BloodId = ?,@StreetAddress = ?," +
-                "@StreetAddress2 =? ,@City = ?,@State = ?,@Country = ?,@Zipcode = ?,@Status = 'active',@GenderX = ?,@FirstNameX = ?," +
-                "@LastNameX = ?,@RelationX = ?,@PhoneX =?,@StreetAddressX = ?,@StreetAddress2X = ?,@CityX = ?,@StateX = ?,@CountryX = ?,@ZipcodeX = ?;";
+        String sql = "EXEC InsertEmployeeWithEmergencyInfo @Gender = ?,@FirstName = ?,@LastName = ?,@Phone = ?,@Mail = ?,@Birthday =? ,@BloodId = ?,@StreetAddress = ?, @StreetAddress2 =? ,@City = ?,@State = ?,@Country = ?,@Zipcode = ?,@Status = 'active',@GenderX = ?,@FirstNameX = ?, @LastNameX = ?,@RelationX = ?,@PhoneX =?,@StreetAddressX = ?,@StreetAddress2X = ?,@CityX = ?,@StateX = ?,@CountryX = ?,@ZipcodeX = ?;";
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = db.getConnection()) {
                 PreparedStatement statement = connection.prepareStatement(sql);
@@ -111,10 +108,7 @@ public class EmployeeDatabase {
 
 
     public CompletionStage<Boolean> updateEmployee(Employee employee) {
-        String sql = "EXEC UpdateEmployeeWithEmergencyInfo\n" +
-                "@Gender = ?,@FirstName = ?,@LastName = ?,@Phone = ?,@Mail = ?,@Birthday =? ,@BloodId = ?,@StreetAddress = ?," +
-                "@StreetAddress2 =? ,@City = ?,@State = ?,@Country = ?,@Zipcode = ?,@id = ?,@GenderX = ?,@FirstNameX = ?,@LastNameX = ?," +
-                "@RelationX = ?,@PhoneX =?,@StreetAddressX = ?,@StreetAddress2X = ?,@CityX = ?,@StateX = ?,@CountryX = ?,@ZipcodeX = ?, @EmployeeId = ?;";
+        String sql = "EXEC UpdateEmployeeWithEmergencyInfo @Gender = ?,@FirstName = ?,@LastName = ?,@Phone = ?,@Mail = ?,@Birthday =? ,@BloodId = ?,@StreetAddress = ?, @StreetAddress2 =? ,@City = ?,@State = ?,@Country = ?,@Zipcode = ?,@id = ?,@GenderX = ?,@FirstNameX = ?,@LastNameX = ?, @RelationX = ?,@PhoneX =?,@StreetAddressX = ?,@StreetAddress2X = ?,@CityX = ?,@StateX = ?,@CountryX = ?,@ZipcodeX = ?, @EmployeeId = ?;";
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = db.getConnection()) {
                 PreparedStatement statement = connection.prepareStatement(sql);
@@ -254,11 +248,11 @@ public class EmployeeDatabase {
     }
 
     public CompletionStage<Boolean> saveUserAccount(UserAccount userAccount) {
-        String sql = "INSERT INTO userAccount (email, password, firstname, lastname) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO userAccount (userName, password, firstname, lastname) VALUES (?, ?, ?, ?)";
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = db.getConnection()) {
                 PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setString(1, userAccount.getEmail());
+                statement.setString(1, userAccount.getUserName());
                 statement.setString(2, userAccount.getPassword());
                 statement.setString(3, userAccount.getFirstName());
                 statement.setString(4, userAccount.getLastName());
@@ -272,24 +266,52 @@ public class EmployeeDatabase {
         });
     }
 
-    public CompletionStage<Boolean> checkUserCredentials(String email, String password) {
-        String sql = "SELECT COUNT(*) FROM userAccount WHERE email = ? AND password = ?";
+    public CompletionStage<Boolean> checkUserCredentials(String userName, String password) {
+        String sql = "SELECT password from userAccount WHERE userName = ?";
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = db.getConnection()) {
                 PreparedStatement statement = connection.prepareStatement(sql);
-                statement.setString(1, email);
-                statement.setString(2, password);
+                statement.setString(1, userName);
 
                 ResultSet rs = statement.executeQuery();
-                rs.next();
-                int count = rs.getInt(1);
-                return count > 0;
+                if (rs.next()) {
+                    String storedPassword = rs.getString("password");
+                    return BCrypt.checkpw(password, storedPassword);
+                } else {
+                    return false;
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
                 return false;
             }
         });
+    }
 
+    public CompletableFuture<Optional<?>> loadUserByUsername(String userName) {
+        String sql = "select * from userAccount WHERE userName = ?";
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = db.getConnection()) {
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setString(1, userName);
+                ResultSet rs = statement.executeQuery();
+                if (rs.next()) {
+                    return Optional.of(createUserFromResultSet(rs));
+                } else {
+                    return Optional.empty();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return Optional.empty();
+            }
+        });
+    }
 
+    private UserAccount createUserFromResultSet(ResultSet resultSet) throws SQLException {
+        UserAccount userAccount = new UserAccount();
+        userAccount.setFirstName(resultSet.getString("firstName"));
+        userAccount.setLastName(resultSet.getString("lastName"));
+        userAccount.setUserName(resultSet.getString("userName"));
+        userAccount.setPassword(resultSet.getString("password"));
+        return userAccount;
     }
 }
