@@ -8,6 +8,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.test.WithApplication;
 import services.EmployeeDatabase;
+import services.JWTService;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -62,9 +63,11 @@ public class EmployeeControllerTest extends WithApplication {
     @Test
     public void testCreateEmployeeSuccess() throws ExecutionException, InterruptedException {
         EmployeeDatabase mockDatabase = mock(EmployeeDatabase.class);
+        JWTService jwtService = mock(JWTService.class);
+
         when(mockDatabase.saveEmployee(any(Employee.class))).thenReturn(CompletableFuture.completedFuture(true));
 
-        EmployeeController employeeController = new EmployeeController(mockDatabase);
+        EmployeeController employeeController = new EmployeeController(mockDatabase, jwtService);
 
         JsonNode jsonNode = Json.parse("{\"firstName\":\"Siddarood\",\"lastName\":\"Karachuri\",\"gender\":\"Male\"}");
 
@@ -84,9 +87,10 @@ public class EmployeeControllerTest extends WithApplication {
     @Test
     public void testCreateEmployeeFailure() throws ExecutionException, InterruptedException {
         EmployeeDatabase mockDatabase = mock(EmployeeDatabase.class);
+        JWTService jwtService = mock(JWTService.class);
         when(mockDatabase.saveEmployee(any(Employee.class))).thenReturn(CompletableFuture.completedFuture(true));
 
-        EmployeeController employeeController = new EmployeeController(mockDatabase);
+        EmployeeController employeeController = new EmployeeController(mockDatabase, jwtService);
 
         JsonNode jsonNode = Json.parse("{\"firstame\":\"Siddarood\",\"lastame\":\"Karachuri\"}");
 
@@ -104,9 +108,11 @@ public class EmployeeControllerTest extends WithApplication {
     @Test
     public void testCreateEmployeeFailure1() throws InterruptedException, ExecutionException {
         EmployeeDatabase mockDatabase = mock(EmployeeDatabase.class);
+        JWTService jwtService = mock(JWTService.class);
+
         when(mockDatabase.saveEmployee(any(Employee.class))).thenReturn(CompletableFuture.completedFuture(true));
 
-        EmployeeController employeeController = new EmployeeController(mockDatabase);
+        EmployeeController employeeController = new EmployeeController(mockDatabase, jwtService);
 
         Http.Request request = createFakeRequest("POST", "/create", "Content-Type", "application/json", null);
 
@@ -122,9 +128,11 @@ public class EmployeeControllerTest extends WithApplication {
     @Test
     public void testCreateEmployeeFailure2() throws ExecutionException, InterruptedException {
         EmployeeDatabase mockDatabase = mock(EmployeeDatabase.class);
+        JWTService jwtService = mock(JWTService.class);
+
         when(mockDatabase.saveEmployee(any(Employee.class))).thenReturn(CompletableFuture.completedFuture(false));
 
-        EmployeeController employeeController = new EmployeeController(mockDatabase);
+        EmployeeController employeeController = new EmployeeController(mockDatabase, jwtService);
 
         JsonNode jsonNode = Json.parse("{\"firstame\":\"Siddarood\",\"lastame\":\"Karachuri\"}");
 

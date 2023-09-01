@@ -30,19 +30,19 @@ public class AuthenticatedAction extends Action<Security.Authenticated> {
     public CompletionStage<Result> call(Http.Request request) {
         String authHeader = request.header("Authorization").toString();
         String token;
-        String userName1 = null;
+        String userName = null;
         System.out.println("authHeader " + authHeader);
         if (authHeader != null && authHeader.startsWith("Optional[Bearer")) {
             token = authHeader.substring(16, 145);
             System.out.println("token " + token);
-            userName1 = jwtService.extractUsername(token);
+            userName = jwtService.extractUsername(token);
 
         } else {
             token = null;
         }
 
-        if (userName1 != null) {
-            CompletableFuture<Optional<?>> futureUserAccount = database.loadUserByUsername(userName1);
+        if (userName != null) {
+            CompletableFuture<Optional<?>> futureUserAccount = database.loadUserByUsername(userName);
             return futureUserAccount.thenCompose(userAccountOptional -> {
                 if (userAccountOptional.isPresent()) {
                     UserAccount userAccount = (UserAccount) userAccountOptional.get();

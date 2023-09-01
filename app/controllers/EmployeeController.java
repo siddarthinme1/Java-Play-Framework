@@ -280,7 +280,6 @@ public class EmployeeController extends Controller {
                     @ApiResponse(code = 404, message = "Employee not Found"),
             }
     )
-    @With(AuthenticatedAction.class)
     public CompletionStage<Result> saveUserAccount(Http.Request request) {
         JsonNode json = request.body().asJson();
         if (json == null) {

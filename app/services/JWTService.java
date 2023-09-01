@@ -22,7 +22,12 @@ public class JWTService {
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        try {
+            return claimsResolver.apply(claims);
+        }catch (Exception exception){
+            exception.printStackTrace();
+            return null;
+        }
     }
 
     public String extractUsername(String token) {
@@ -63,11 +68,16 @@ public class JWTService {
 
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return null;
+        }
     }
 }
