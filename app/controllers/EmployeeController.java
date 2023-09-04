@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import javax.inject.Inject;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import models.AuthRequest;
 import models.Employee;
 import models.UserAccount;
@@ -275,7 +276,7 @@ public class EmployeeController extends Controller {
                     @ApiResponse(
                             code = 200,
                             message = "OK Response",
-                            response = Employee.class
+                            response = UserAccount.class
                     ),
                     @ApiResponse(code = 404, message = "Employee not Found"),
             }
@@ -300,65 +301,67 @@ public class EmployeeController extends Controller {
     }
 
 
+//    @ApiOperation(
+//            value = "Get a Employee from the Database",
+//            notes = "Make HTTP request to get a Employee by Id"
+//    )
+//    @ApiResponses(
+//            value = {
+//                    @ApiResponse(
+//                            code = 200,
+//                            message = "OK Response",
+//                            response = UserAccount.class
+//                    ),
+//                    @ApiResponse(code = 404, message = "Unauthorized"),
+//            }
+//    )
+//    @With(AuthenticatedAction.class)
+//    public CompletionStage<Result> checkUserCredentials(Http.Request request) {
+//        JsonNode json = request.body().asJson();
+//        if (json == null) {
+//            return CompletableFuture.completedFuture(
+//                    badRequest("Expecting JSON data")
+//            );
+//        }
+//        AuthRequest authRequest = Json.fromJson(json, AuthRequest.class);
+//        String userName = authRequest.getUserName();
+//        String password = authRequest.getPassword();
+//        if (userName != null && password != null) {
+//            return database
+//                    .checkUserCredentials(userName, password)
+//                    .thenApply(credentialsMatch -> {
+//                        if (credentialsMatch) {
+//                            return ok("Credentials found");
+//                        } else {
+//                            return unauthorized("Credentials not found");
+//                        }
+//                    });
+//        } else {
+//            return CompletableFuture.completedFuture(
+//                    badRequest("Missing or invalid query parameters")
+//            );
+//        }
+//    }
+
+
     @ApiOperation(
-            value = "Get a Employee from the Database",
-            notes = "Make HTTP request to get a Employee by Id"
+            value = "Authenticate the user and return token",
+            notes = "Make HTTP request to get a authentication token"
     )
     @ApiResponses(
             value = {
                     @ApiResponse(
                             code = 200,
-                            message = "OK Response",
-                            response = Employee.class
+                            message = "Bearer Token"
                     ),
-                    @ApiResponse(code = 404, message = "Employee not Found"),
-            }
-    )
-    @With(AuthenticatedAction.class)
-    public CompletionStage<Result> checkUserCredentials(Http.Request request) {
-        JsonNode json = request.body().asJson();
-        if (json == null) {
-            return CompletableFuture.completedFuture(
-                    badRequest("Expecting JSON data")
-            );
-        }
-        AuthRequest authRequest = Json.fromJson(json, AuthRequest.class);
-        String userName = authRequest.getUserName();
-        String password = authRequest.getPassword();
-        if (userName != null && password != null) {
-            return database
-                    .checkUserCredentials(userName, password)
-                    .thenApply(credentialsMatch -> {
-                        if (credentialsMatch) {
-                            return ok("Credentials found");
-                        } else {
-                            return unauthorized("Credentials not found");
-                        }
-                    });
-        } else {
-            return CompletableFuture.completedFuture(
-                    badRequest("Missing or invalid query parameters")
-            );
-        }
-    }
-
-
-    @ApiOperation(
-            value = "Get a Employee from the Database",
-            notes = "Make HTTP request to get a Employee by Id"
-    )
-    @ApiResponses(
-            value = {
-                    @ApiResponse(
-                            code = 200,
-                            message = "OK Response",
-                            response = Employee.class
-                    ),
-                    @ApiResponse(code = 404, message = "Employee not Found"),
+                    @ApiResponse(code = 404, message = "Credentials not found"),
+                    @ApiResponse(code = 400, message = "Expecting JSON data"),
             }
     )
     public CompletionStage<Result> authenticateAndGetToken(Http.Request request) {
         JsonNode json = request.body().asJson();
+        System.out.println(request);
+        System.out.println(json);
         if (json == null) {
             return CompletableFuture.completedFuture(
                     badRequest("Expecting JSON data")

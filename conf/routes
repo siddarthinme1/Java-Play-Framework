@@ -17,7 +17,7 @@ GET     /docs/swagger-ui/*file              controllers.Assets.at(path="/public/
 GET     /                                   controllers.Assets.at(path="/public/swagger-ui", file:String = "swagger-ui.html")
 
 #Get authenticate Token
-GET     /api/authenticate                      controllers.EmployeeController.authenticateAndGetToken(request: Request)
+POST     /api/authenticate                      controllers.EmployeeController.authenticateAndGetToken(request: Request)
 
 
  # Map static resources from the /public folder to the /assets URL path GET /assets/*file controllers.Assets.at(path="/public", file)
@@ -31,7 +31,7 @@ DELETE  /api/employees/:id                  controllers.EmployeeController.delet
 DELETE  /api/employees/restore/:id          controllers.EmployeeController.restore(request: Request,id: Int)
 DELETE  /api/employees/clearBin/            controllers.EmployeeController.emptyRecycleBin(request: Request)
 POST    /api/saveUserAccount                    controllers.EmployeeController.saveUserAccount(request: Request)
-POST    /api/checkUserCredentials               controllers.EmployeeController.checkUserCredentials(request: Request)
+#POST    /api/checkUserCredentials               controllers.EmployeeController.checkUserCredentials(request: Request)
 
 
 
