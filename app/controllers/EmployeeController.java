@@ -320,8 +320,7 @@ public class EmployeeController extends Controller {
         System.out.println(request);
         System.out.println(json);
         if (json == null) {
-            return CompletableFuture.completedFuture(
-                    badRequest("Expecting JSON data")
+            return CompletableFuture.completedFuture(badRequest("Expecting JSON data")
             );
         }
         AuthRequest authRequest = Json.fromJson(json, AuthRequest.class);
