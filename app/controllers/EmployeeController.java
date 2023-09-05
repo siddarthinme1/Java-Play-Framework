@@ -301,49 +301,6 @@ public class EmployeeController extends Controller {
     }
 
 
-//    @ApiOperation(
-//            value = "Get a Employee from the Database",
-//            notes = "Make HTTP request to get a Employee by Id"
-//    )
-//    @ApiResponses(
-//            value = {
-//                    @ApiResponse(
-//                            code = 200,
-//                            message = "OK Response",
-//                            response = UserAccount.class
-//                    ),
-//                    @ApiResponse(code = 404, message = "Unauthorized"),
-//            }
-//    )
-//    @With(AuthenticatedAction.class)
-//    public CompletionStage<Result> checkUserCredentials(Http.Request request) {
-//        JsonNode json = request.body().asJson();
-//        if (json == null) {
-//            return CompletableFuture.completedFuture(
-//                    badRequest("Expecting JSON data")
-//            );
-//        }
-//        AuthRequest authRequest = Json.fromJson(json, AuthRequest.class);
-//        String userName = authRequest.getUserName();
-//        String password = authRequest.getPassword();
-//        if (userName != null && password != null) {
-//            return database
-//                    .checkUserCredentials(userName, password)
-//                    .thenApply(credentialsMatch -> {
-//                        if (credentialsMatch) {
-//                            return ok("Credentials found");
-//                        } else {
-//                            return unauthorized("Credentials not found");
-//                        }
-//                    });
-//        } else {
-//            return CompletableFuture.completedFuture(
-//                    badRequest("Missing or invalid query parameters")
-//            );
-//        }
-//    }
-
-
     @ApiOperation(
             value = "Authenticate the user and return token",
             notes = "Make HTTP request to get a authentication token"
