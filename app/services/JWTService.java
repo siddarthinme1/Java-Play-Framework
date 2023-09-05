@@ -1,6 +1,8 @@
 package services;
 
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,13 +20,15 @@ import java.util.function.Function;
 
 @Component
 public class JWTService {
-    public static final String SECRET = "3R6BfGL4Q3pKx5HW6zF06/s0j1p3g+49maAmLSPwzlllFjQ0uipmWcFsxz0P6TEm";
+
+    static Config config = ConfigFactory.load();
+    public static final String SECRET = config.getString("SECRET");
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         try {
             return claimsResolver.apply(claims);
-        }catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
             return null;
         }
